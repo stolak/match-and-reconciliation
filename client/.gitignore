@@ -1,0 +1,10 @@
+/build
+/node_modules
+package-lock.json
+.eslintcache
+.env
+.env*
+!.env.example
+.DS_Store
+/coverage
+/.vscode
