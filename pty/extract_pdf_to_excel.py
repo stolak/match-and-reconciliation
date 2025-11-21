@@ -43,7 +43,7 @@ def extract_table_from_pdf(pdf_path, output_excel_path):
 
 # Specify the input PDF file and output Excel file
 #pdf_path = r'C:/Users/user/Desktop/bank statement.pdf'
-pdf_path = r'pdf.pdf'
+pdf_path = r'april.pdf'
 output_excel_path = 'extracted_bank_statement2.xlsx'
 
 # Run the extraction function

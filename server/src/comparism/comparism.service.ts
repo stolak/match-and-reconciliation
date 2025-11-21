@@ -358,8 +358,8 @@ export class ComparismService {
     try {
       const chunks1 = this.chunkArray(record1, 5);
       const chunks2 = this.chunkArray(record2, 5);
-// console.log(  chunks1, chunks2);
-return
+      // console.log(  chunks1, chunks2);
+      return;
       // Loop through each chunk in chunks1 and each chunk in  chunks2
       const comparisonPromises: Promise<MatchRecord[]>[] = [];
 
@@ -471,7 +471,7 @@ return
             },
             { role: 'user', content: prompt },
           ],
-          max_tokens: 1000,
+          // max_tokens: 1000,
         },
         {
           headers: {
@@ -520,10 +520,11 @@ Record1 itemid: 3 matches Record2 itemid: 3
 
 \nRecord1: ${result1}
 \nRecord2: ${result2}`;
-
-
+    console.log(prompt);
+    throw 'Record not implement';
     try {
       const result = await this.compare(prompt, '');
+      console.log('Comparison Result:', result); // Log the raw result for debugging
       const objArr = this.stringToObectArray(result);
       const recordUpdate = objArr.map((rec) => {
         const updates = [];
@@ -554,13 +555,13 @@ Record1 itemid: 3 matches Record2 itemid: 3
       await Promise.all(recordUpdate);
 
       // console.log(objArr);
-      return ;
+      return;
     } catch (error) {
       throw new Error(`Error comparing records: ${error.message}`);
     }
   }
 
-    async compareRecords5Old250604(refId: string): Promise<null> {
+  async compareRecords5Old250604(refId: string): Promise<null> {
     const record1 = await this.reconciliationSourceRepository.find({
       isPrimary: true,
       refId,
@@ -620,7 +621,7 @@ Record1 itemid: 3 matches Record2 itemid: 3
       await Promise.all(recordUpdate);
 
       // console.log(objArr);
-      return ;
+      return;
     } catch (error) {
       throw new Error(`Error comparing records: ${error.message}`);
     }

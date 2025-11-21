@@ -33,7 +33,7 @@ def extract_table_from_pdf(pdf_path, output_excel_path):
     print(f"Data successfully extracted from all pages and saved to {output_excel_path}")
 
 # Specify the input PDF file and output Excel file
-pdf_path = r'pdf.pdf'
+pdf_path = r'april.pdf'
 output_excel_path = 'combined_bank_statement_all.xlsx'
 
 # Run the extraction function

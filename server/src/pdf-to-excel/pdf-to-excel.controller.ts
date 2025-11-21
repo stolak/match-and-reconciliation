@@ -97,10 +97,11 @@ export class PdfToExcelController {
       // Create a FormData object to send the file to the Python server
       const formData = new FormData();
       formData.append('file', file.buffer, file.originalname);
-
+      //save file to disk
+      console.log('File received:', file.originalname, 'Size:', file.size);
       // Call the Python API to convert the PDF to Excel
       const response = await axios.post(
-        'http://127.0.0.1:5000/convert',
+        'http://127.0.0.1:5001/convert',
         formData,
         {
           headers: formData.getHeaders(),

@@ -2,3 +2,7 @@ flask
 pandas
 pdfplumber
 openpyxl
+pdfminer.six
+Pillow
+pytesseract
+pdf2image
