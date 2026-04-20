@@ -6,3 +6,4 @@ pdfminer.six
 Pillow
 pytesseract
 pdf2image
+gunicorn
