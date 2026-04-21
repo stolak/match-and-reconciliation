@@ -1,4 +1,6 @@
-from flask import Flask, request, jsonify
+from flask import Flask, request, jsonify, Response, stream_with_context
+import json
+import traceback
 import pandas as pd
 import pdfplumber
 
@@ -91,11 +93,25 @@ def extract_table_from_pdf(pdf_file):
     # Remove duplicate rows
     df = df.drop_duplicates()
 
-    # Convert to JSON records
     # Replace NaN with None for valid JSON
     df = df.where(pd.notnull(df), None)
-    json_data = df.to_dict(orient='records')
-    return json_data
+    return df
+
+
+def _stream_df_as_json_array(df: pd.DataFrame):
+    columns = list(df.columns)
+
+    yield "["
+    first = True
+    for row in df.itertuples(index=False, name=None):
+        record = dict(zip(columns, row))
+        chunk = json.dumps(record, ensure_ascii=False, separators=(",", ":"))
+        if first:
+            first = False
+            yield chunk
+        else:
+            yield "," + chunk
+    yield "]"
 
 
 @app.route('/convert', methods=['POST'])
@@ -105,12 +121,19 @@ def convert_pdf_to_json():
 
     pdf_file = request.files['file']
     print(pdf_file)
-    json_output = extract_table_from_pdf(pdf_file)
-    
-    if json_output is None:
-        return jsonify({"error": "Failed to extract tables"}), 500
 
-    return jsonify(json_output)
+    try:
+        df = extract_table_from_pdf(pdf_file)
+        if df is None:
+            return jsonify({"error": "Failed to extract tables"}), 500
+
+        return Response(
+            stream_with_context(_stream_df_as_json_array(df)),
+            mimetype="application/json",
+        )
+    except Exception as e:
+        traceback.print_exc()
+        return jsonify({"error": "Internal error converting PDF", "detail": str(e)}), 500
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000)
